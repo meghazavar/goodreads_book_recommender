@@ -5,17 +5,23 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 
-class Helper:
+class  helper
+    def __init__(self):
+        print("in constructor collab_recommender")
+
+    def find_titles(self,books, title):
+        titles = books.loc[books['title'].str.lower().str.contains(title),'title'].tolist()
+        return titles    
+
+class collab_recommender:
     """docstring for ."""
 
 
     def __init__(self):
-        print("in constructor1")
+        print("in constructor collab_recommender")
 
 
-    def find_titles(self,books, title):
-        titles = books.loc[books['title'].str.lower().str.contains(title),'title'].tolist()
-        return titles
+
 
 
 def main():
