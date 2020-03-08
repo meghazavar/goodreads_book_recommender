@@ -1,0 +1,38 @@
+<html>
+    <head><h1>{{title}}</h1>
+    <link rel="stylesheet" href="../static/styles/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+   
+    </head>
+    <body>
+        <form action='/echo' method ="POST">
+            <input name ='text'>
+            <input type='submit' value ='Enter your favorate book'><script>
+                $('#clickme').click(function() {
+                $.ajax({
+                    type : 'get',
+                    url  :'/data',
+                    success : function(response) {
+                        alert(response);
+                    }
+                });
+                });
+            </script>
+        </form>
+        <button id='clickme'>click me for ajax</button>
+        <script>
+            $('#clickme').click(function() {
+            $.ajax({
+                type : 'get',
+                url  :'/data',
+                success : function(response) {
+                    //alert(JSON.stringify(response));
+                    localStorage.setItem()
+
+                }
+            });
+            });
+        </script>
+    </body>
+</html>
+
