@@ -7,7 +7,7 @@ class  helper:
 
 
     def __init__(self):
-        print("in constructor ")
+        print("Gathering data... ")
         self.gc = client.GoodreadsClient('zIHHGGHATvYay6dTTZ1AqA',
                             'xFiCr7PBabSezd7zpXhqNyvsIDFfoX4ftC6Pww7v2g')
 
