@@ -21,10 +21,44 @@ class  helper:
         missing_desc_books = books[books[column].isna()]['book_id'].values
         return missing_desc_books
 
+    def fill_missing_columns(self,fname,howmany='all'):
+        books =pd.read_csv("../data/books_desc.csv")
+        missing_desc_books = self.get_book_id_list_for_missing_column(books,'description')
+        print(missing_desc_books)
+        print (f"getting {howmany} out of missing {len(missing_desc_books)} descriptions" )
+        howmany = len(missing_desc_books) if(howmany =='all') else howmany
+
+        for i in missing_desc_books[ :howmany]:
+            goodreads_book_id = books.loc[books['book_id'] == i,'goodreads_book_id'].values[0]
+
+            try:
+                book_obj= h.get_book(goodreads_book_id)
+
+                print( f"{i},{book_obj}")
+                if(i % 10 ==0):
+                    print("saving the results to the file....")
+                    books.to_csv(fname, index=False)
+
+                books.loc[books['book_id'] == i,'description']= book_obj.description
+                try:
+                    books.loc[books['book_id'] == i,'num_pages']=  book_obj.num_pages
+                except:
+                    books.loc[books['book_id'] == i,'num_pages']=  0
+
+                books.loc[books['book_id'] == i,'is_ebook']=book_obj.is_ebook
+            except exp:
+                print(exp)
+                books.loc[books['book_id'] == i,'num_pages']=  0
+                books.loc[books['book_id'] == i,'description'] =""
+                books.loc[books['book_id'] == i,'is_ebook'] =False
+                print(f"failed to parse {i}")
+        return books
+
     def get_books(self,topic):
         books_on_subject = self.gc.search_books(topic)
         books_list =[]
         for b in books_on_subject:
+
            book ={}
            book['goodreads_book_id']=b.gid
            #book['isbn']= b.isbn
@@ -41,5 +75,10 @@ class  helper:
            book['is_ebook']=b.is_ebook
            if((b.isbn is not None) and (b.description is not None) and (b.average_rating is not None)):
                books_list.append(book)
+               print(f"Downloading book {b.title} for topic {topic}")
         df =pd.DataFrame(books_list)
         return df
+
+
+h=helper()
+h.fill_missing_columns("../data/books_desc.csv",10)
