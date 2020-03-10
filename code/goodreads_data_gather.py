@@ -46,12 +46,12 @@ class  helper:
                     books.loc[books['book_id'] == i,'num_pages']=  0
 
                 books.loc[books['book_id'] == i,'is_ebook']=book_obj.is_ebook
-            except exp:
-                print(exp)
+            except:
+                #print(exp)
                 books.loc[books['book_id'] == i,'num_pages']=  0
                 books.loc[books['book_id'] == i,'description'] =""
                 books.loc[books['book_id'] == i,'is_ebook'] =False
-                print(f"failed to parse {i}")
+                #print(f"failed to parse {i}")
         return books
 
     def get_books(self,topic):
@@ -81,4 +81,4 @@ class  helper:
 
 
 h=helper()
-h.fill_missing_columns("../data/books_desc.csv",10)
+h.fill_missing_columns("../data/books_desc.csv",1000)
