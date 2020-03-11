@@ -76,7 +76,7 @@ class  helper:
            if((strict== True) and (b.isbn is not None) and (b.description is not None) and (b.average_rating is not None)):
                books_list.append(book)
                print(f"Downloading book {b.title} for topic {topic}")
-            elseif strict== False:
+            elif strict== False:
                books_list.append(book)
                print(f"Downloading book {b.title} for topic {topic}")
 
