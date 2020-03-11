@@ -54,7 +54,7 @@ class  helper:
                 #print(f"failed to parse {i}")
         return books
 
-    def get_books(self,topic):
+    def get_books(self,topic, strict =True):
         books_on_subject = self.gc.search_books(topic)
         books_list =[]
         for b in books_on_subject:
@@ -73,9 +73,13 @@ class  helper:
            except:
                book['num_pages'] =0
            book['is_ebook']=b.is_ebook
-           if((b.isbn is not None) and (b.description is not None) and (b.average_rating is not None)):
+           if((strict== True) and (b.isbn is not None) and (b.description is not None) and (b.average_rating is not None)):
                books_list.append(book)
                print(f"Downloading book {b.title} for topic {topic}")
+            elseif strict== False:
+               books_list.append(book)
+               print(f"Downloading book {b.title} for topic {topic}")
+
         df =pd.DataFrame(books_list)
         return df
 
