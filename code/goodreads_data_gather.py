@@ -58,28 +58,29 @@ class  helper:
         books_on_subject = self.gc.search_books(topic)
         books_list =[]
         for b in books_on_subject:
-
-           book ={}
-           book['goodreads_book_id']=b.gid
-           #book['isbn']= b.isbn
-           book['authors']=b.authors
-           book['title']=b.title
-           book['language_code']=b.language_code
-           book['average_rating']=b.average_rating
-           book['ratings_count']=b.ratings_count
-           book[ 'description']=b.description
-           try :
-               book['num_pages']=b.num_pages
+           try:
+               book ={}
+               book['goodreads_book_id']=b.gid
+               #book['isbn']= b.isbn
+               book['authors']=b.authors
+               book['title']=b.title
+               book['language_code']=b.language_code
+               book['average_rating']=b.average_rating
+               book['ratings_count']=b.ratings_count
+               book[ 'description']=b.description
+               try :
+                   book['num_pages']=b.num_pages
+               except:
+                   book['num_pages'] =0
+               book['is_ebook']=b.is_ebook
+               if((strict== True) and (b.isbn is not None) and (b.description is not None) and (b.average_rating is not None)):
+                   books_list.append(book)
+                   print(f"Downloading book {b.title} for topic {topic}")
+               elif (strict== False):
+                   books_list.append(book)
+                   print(f"Downloading book {b.title} for topic {topic}")
            except:
-               book['num_pages'] =0
-           book['is_ebook']=b.is_ebook
-           if((strict== True) and (b.isbn is not None) and (b.description is not None) and (b.average_rating is not None)):
-               books_list.append(book)
-               print(f"Downloading book {b.title} for topic {topic}")
-            elif strict== False:
-               books_list.append(book)
-               print(f"Downloading book {b.title} for topic {topic}")
-
+                print(f"failed to parse {b.title}")
         df =pd.DataFrame(books_list)
         return df
 
