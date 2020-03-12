@@ -19,15 +19,15 @@ import pickle
 class  helper:
     def __init__(self,_ds):
         print("in constructor collab_recommender")
-        ds =_ds
+        self.ds =_ds
 
-    def search_by_title(title,strict =True):
+    def search_by_title(self,title,strict =True):
         if(strict ==True):
-          print(ds.loc[ds['title'].str.lower().str.contains(title.lower()),['title','book_id']])
+          print(self.ds.loc[self.ds['title'].str.lower().str.contains(title.lower()),['title','book_id']])
           return
         arr = title.split(' ')
         for a in arr:
-          print(ds.loc[ds['title'].str.lower().str.contains(a.lower()),['title','book_id']])
+          print(self.ds.loc[self.ds['title'].str.lower().str.contains(a.lower()),['title','book_id']])
 
     def book_cluster(self,book_id):
         return ds.loc[ds['book_id'] == book_id,'Cluster'].values[0]
@@ -47,7 +47,7 @@ class content_recommender:
     def __init__(self):
         print("in constructor content_recommender")
 
-    def book_title(self,book_id):
+    def book_title(self,ds,book_id):
         return self.ds.loc[self.ds['book_id'] == book_id,'title'].values[0]
 
     def build_nlp_content_recommender(self,ds, column):
@@ -113,14 +113,19 @@ class collab_recommender:
 books = pd.read_csv("../data/books_desc.csv")
 ratings = pd.read_csv("../data/ratings.csv")
 
-#r_content =content_recommender()
-books['title_description'] = books['authors'] + " " + books['title'] + " " + books['description']
-books.to_csv("../data/books_desc.csv", index=False)
+
+#books['title_description'] = books['authors'] + " " + books['title'] + " " + books['description']
+#books.to_csv("../data/books_desc.csv", index=False)
 
 #r_content.build(books,'title_description')
-#cs =pickle.load(open('content_cs.p','rb'))
-#r_content.recommend(books,10032,cs)
+
+# r_content =content_recommender()
+# cs =pickle.load(open('content_cs.p','rb'))
+# r_content.recommend(books,1273,cs)
 
 # r_collab =collab_recommender(books,ratings)
 # r_collab.build_item_based()
 # r_collab.recommend(books,5)
+
+h = helper(books)
+print(h.search_by_title('data',False))
