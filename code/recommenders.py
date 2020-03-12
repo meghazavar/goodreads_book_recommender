@@ -14,6 +14,7 @@ lemmatizer = WordNetLemmatizer()
 from sklearn.metrics.pairwise import pairwise_distances
 import regex as re
 from scipy import sparse
+import pickle
 #--------------------------------------------
 class  helper:
     def __init__(self,_ds):
@@ -45,7 +46,6 @@ class content_recommender:
 
     def __init__(self):
         print("in constructor content_recommender")
-        h = helper(ds)
 
     def book_title(self,book_id):
         return self.ds.loc[self.ds['book_id'] == book_id,'title'].values[0]
@@ -67,6 +67,7 @@ class content_recommender:
         print(f"builing content recommender using {column}...")
         ds[column] =ds[column].apply(self.create_bag_of_words)
         cosine_similarities =self.build_nlp_content_recommender(ds,column)
+        pickle.dump(cosine_similarities, open('content_cs.p', 'wb'))
         return cosine_similarities
 
     def recommend(self,ds,book_id,cosine_similarities):
@@ -85,7 +86,8 @@ class content_recommender:
                 i=i+1
                 book_id = rec[1]
                 print(book_id)
-                abc = abc + (f"{self.book_title(book_id)}")
+                title = ds.loc[books['book_id'] == book_id,'title'].values[0]
+                abc = abc + (f"{title}")
 
         print(f"||=>{title}| {author} | {book_id}|  ")
         print(abc)
@@ -111,11 +113,14 @@ class collab_recommender:
 books = pd.read_csv("../data/books_desc.csv")
 ratings = pd.read_csv("../data/ratings.csv")
 
-# r_content =content_recommender()
-# books['title_description'] = books['authors'] + " " + books['title'] + " " + books['description']
-# cs = r_content.build(books,'title_description')
-# r_content.recommend(books,10032,cs)
+#r_content =content_recommender()
+books['title_description'] = books['authors'] + " " + books['title'] + " " + books['description']
+books.to_csv("../data/books_desc.csv", index=False)
 
-r_collab =collab_recommender(books,ratings)
-r_collab.build_item_based()
-r_collab.recommend(books,5)
+#r_content.build(books,'title_description')
+#cs =pickle.load(open('content_cs.p','rb'))
+#r_content.recommend(books,10032,cs)
+
+# r_collab =collab_recommender(books,ratings)
+# r_collab.build_item_based()
+# r_collab.recommend(books,5)
