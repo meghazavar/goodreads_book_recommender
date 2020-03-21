@@ -128,4 +128,4 @@ ratings = pd.read_csv("../data/ratings.csv")
 # r_collab.recommend(books,5)
 
 h = helper(books)
-print(h.search_by_title('data',False))
+print(h.search_by_title('Harry potter',False))
